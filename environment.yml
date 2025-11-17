@@ -1,0 +1,15 @@
+name: local-rag
+channels:
+  - conda-forge
+  - default
+dependencies:
+  - python=3.12.11
+  - chromadb=0.6.3
+  - flask=3.1.2
+  - langchain=1.0.7
+  - langchain-community=0.3.12
+  - langchain-text-splitters=1.0.0
+  - pip
+  - pip:
+      - unstructured
+      - unstructured[all-docs]
