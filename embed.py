@@ -4,7 +4,7 @@ the vector database."""
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from get_vector_db import get_vector_db
 
@@ -31,11 +31,11 @@ def save_file(file):
 # Function to load and split the data from the PDF file
 def load_and_split_data(file_path):
     # Load the PDF file and split the data into chunks
-    loader = UnstructuredPDFLoader(file_path=file_path)
+    loader = PyPDFLoader(file_path=file_path)
     data = loader.load()
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=7500, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
     chunks = text_splitter.split_documents(data)
-
+    print(f"Split into {len(chunks)} sub-documents.")
     return chunks
 
 
@@ -47,7 +47,6 @@ def embed(file):
         chunks = load_and_split_data(file_path)
         db = get_vector_db()
         db.add_documents(chunks)
-        db.persist()
         os.remove(file_path)
 
         return True
